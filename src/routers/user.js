@@ -1,8 +1,10 @@
 const express = require('express')
-const User = require('../db/models/user')
+const User = require('../models/user')
+const auth = require('../middlewares/auth')
 const router = new express.Router()
 
-//Public router
+//Public routers below
+
 router.post('/users', async (req, res) => {
     const user = new User(req.body)
     try {
@@ -24,14 +26,33 @@ router.post('/users/login', async (req, res) => {
     }
 })
 
-//Private or Authenticate router
-router.get('/users', async (req, res) => {
+//Private or Authenticate routers below
+
+router.post('/users/logout', auth, async (req, res) => {
     try {
-        const users = await User.find({})
-        res.send(users)
+        req.user.tokens = req.user.tokens.filter((token) => {
+            return token.token !== req.token
+        })
+        await req.user.save()
+
+        res.send()
     } catch (e) {
-        res.status(500).send()
+        res.status(500).status
     }
+})
+
+router.post('/users/logoutAll', auth, async (req, res) => {
+    try {
+        req.user.tokens = []
+        await req.user.save()
+        res.send()
+    } catch (e) {
+        res.status(500).status
+    }
+})
+
+router.get('/users/me', auth, async (req, res) => {
+    res.send(req.user)
 })
 
 router.get('/users/:id', async (req, res) => {
