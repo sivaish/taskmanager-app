@@ -2,6 +2,7 @@ const express = require('express')
 const User = require('../models/user')
 const auth = require('../middlewares/auth')
 const router = new express.Router()
+const multer = require('multer')
 
 //Public routers below
 
@@ -86,5 +87,24 @@ router.delete('/users/me', auth, async (req, res) => {
         res.status(500).send()
     }
 })
+
+const userpic = multer({
+    dest: 'avatars',
+    limits:{
+        fileSize: 1000000
+    }, fileFilter(req, file, cb){
+
+        if(!file.originalname.match(/\.(jpg|jpeg)$/)){
+            return cb(new Error('Supported files are JPG and JPEG'))
+        }
+
+        cb(undefined, true)
+
+    }
+})
+
+router.post('/users/me/avatar', userpic.single('avatar'),  (req,res) => {
+    res.send()
+}) 
 
 module.exports = router
