@@ -4,7 +4,7 @@ if (process.env.npm_lifecycle_event === 'dev' || process.env.npm_lifecycle_event
 } else if (process.env.npm_lifecycle_event === 'qa') {
     require('dotenv').config({ path: './config/dev.env' })
 } else {
-    require('dotenv').config({ path: './config/dev.env' })
+    console.log('Production server starts');
 }
 
 const express = require('express')
