@@ -1,5 +1,5 @@
 // Configuration file
-if (process.env.npm_lifecycle_event === 'dev' || process.env.npm_lifecycle_event === 'start' ) {
+if (process.env.npm_lifecycle_event === 'dev') {
     require('dotenv').config({ path: './config/dev.env' })
 } else if (process.env.npm_lifecycle_event === 'qa') {
     require('dotenv').config({ path: './config/dev.env' })
